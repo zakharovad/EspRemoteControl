@@ -7,14 +7,14 @@ import okhttp3.Request
 import okhttp3.WebSocket
 import java.util.concurrent.TimeUnit
 
-class WebServicesProvider {
+class WebSocketProvider {
 
     private var _webSocket: WebSocket? = null
 
     private val socketOkHttpClient = OkHttpClient.Builder()
         .readTimeout(30, TimeUnit.SECONDS)
         .connectTimeout(39, TimeUnit.SECONDS)
-        .hostnameVerifier { _, _ -> true }
+        //.hostnameVerifier { _, _ -> false }
         .build()
 
     @ExperimentalCoroutinesApi
@@ -25,25 +25,28 @@ class WebServicesProvider {
         with(WebSocketListener()) {
             startSocket(this)
             this@with.eventBus
-        }
-
-    @ExperimentalCoroutinesApi
-    fun startSocket(webSocketListener: WebSocketListener) {
-        _webSocketListener = webSocketListener
-        _webSocket = socketOkHttpClient.newWebSocket(
-            Request.Builder().url("ws://echo.websocket.org").build(),
-            webSocketListener
-        )
-        socketOkHttpClient.dispatcher.executorService.shutdown()
     }
 
     @ExperimentalCoroutinesApi
+    fun startSocket(webSocketListener: WebSocketListener): WebSocketEventBus<SocketUpdate> {
+        _webSocketListener = webSocketListener
+        _webSocket = socketOkHttpClient.newWebSocket(
+            Request.Builder().url("ws://192.168.4.1:81").build(),
+            webSocketListener
+        )
+        socketOkHttpClient.connectionPool.evictAll();
+        //socketOkHttpClient.dispatcher.executorService.shutdown()
+        return webSocketListener.eventBus
+    }
+    @ExperimentalCoroutinesApi
     fun stopSocket() {
         try {
+
+            _webSocket?.cancel()
             _webSocket?.close(NORMAL_CLOSURE_STATUS, null)
             _webSocket = null
-            _webSocketListener?.eventBus?.close()
-            _webSocketListener = null
+            //_webSocketListener?.eventBus?.close()
+            //_webSocketListener = null
         } catch (ex: Exception) {
         }
     }
