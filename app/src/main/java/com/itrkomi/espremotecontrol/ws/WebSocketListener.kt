@@ -12,9 +12,11 @@ import okhttp3.WebSocketListener;
 
 open class WebSocketListener:WebSocketListener() {
     val eventBus:WebSocketEventBus<SocketUpdate>  = WebSocketEventBus(Channel.CONFLATED);
+    var isConnected = false;
     override fun onOpen(webSocket: WebSocket, response: Response) {
         webSocket.send("Hi, it is remote client")
         GlobalScope.launch {
+            isConnected = true;
             eventBus.postEvent(SocketUpdate("OpenSocket"))
         }
     }
@@ -26,6 +28,7 @@ open class WebSocketListener:WebSocketListener() {
     }
 
     override fun onClosing(webSocket: WebSocket, code: Int, reason: String) {
+        isConnected = false;
         GlobalScope.launch {
             eventBus.postEvent(SocketUpdate(exception = SocketAbortedException()))
         }

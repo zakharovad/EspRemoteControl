@@ -72,7 +72,8 @@ class MainActivity : AppCompatActivity(), KodeinAware {
                    }
                 }
             } catch (ex: java.lang.Exception) {
-                Log.e(" consumeEach Error: ", ex.toString())
+                Toast.makeText(applicationContext, ex.message, Toast.LENGTH_SHORT).show()
+                openWebSocket();
             }
         }
     }
