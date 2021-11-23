@@ -17,10 +17,13 @@ class WSRepository constructor(private val provider: WebSocketProvider) {
         return provider.startSocket(listener);
     }
 
-
     @ExperimentalCoroutinesApi
     fun closeSocket() {
         provider.stopSocket()
+    }
+
+    fun sendMessage(message: String) {
+        provider.sendMessage(message)
     }
 
 }

@@ -39,6 +39,10 @@ class WebSocketProvider {
         return webSocketListener.eventBus
     }
     @ExperimentalCoroutinesApi
+    fun sendMessage(message: String) {
+        _webSocket?.send(message)
+    }
+    @ExperimentalCoroutinesApi
     fun stopSocket() {
         try {
 
