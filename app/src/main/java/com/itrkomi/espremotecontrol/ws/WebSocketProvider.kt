@@ -13,7 +13,7 @@ class WebSocketProvider {
 
     private val socketOkHttpClient = OkHttpClient.Builder()
         .readTimeout(30, TimeUnit.SECONDS)
-        .connectTimeout(39, TimeUnit.SECONDS)
+        .connectTimeout(10, TimeUnit.SECONDS)
         //.hostnameVerifier { _, _ -> false }
         .build()
 

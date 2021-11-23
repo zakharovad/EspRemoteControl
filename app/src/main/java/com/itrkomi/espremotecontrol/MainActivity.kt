@@ -42,9 +42,12 @@ class MainActivity : AppCompatActivity(), KodeinAware {
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
     }
+
     private fun openWebSocket(){
+        Toast.makeText(applicationContext, "Подключение к плате...", Toast.LENGTH_SHORT).show()
         wsRepository.startSocket(webSocketListener)
     }
+
     private fun closeWebSocket(){
         wsRepository.closeSocket()
     }
@@ -59,15 +62,12 @@ class MainActivity : AppCompatActivity(), KodeinAware {
                        Toast.makeText(applicationContext, "Соединение разорвано", Toast.LENGTH_SHORT).show()
                        closeWebSocket();
                        delay(1000)
-                       Toast.makeText(applicationContext, "Переподключение...", Toast.LENGTH_SHORT).show()
-
                        openWebSocket();
                    }else if(it.exception !== null){
                        it.exception.message?.let { it1 -> Log.e("Error: ", it1) }
                        Toast.makeText(applicationContext, "Ошибка подключения", Toast.LENGTH_SHORT).show()
                        closeWebSocket();
                        delay(1000)
-                       Toast.makeText(applicationContext, "Переподключение...", Toast.LENGTH_SHORT).show()
                        openWebSocket();
                    }
                 }
