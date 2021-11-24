@@ -2,6 +2,7 @@ package com.itrkomi.espremotecontrol.app
 
 import android.app.Application
 import android.content.Context
+import com.itrkomi.espremotecontrol.di.modelsModule
 import com.itrkomi.espremotecontrol.di.networkModule
 import com.itrkomi.espremotecontrol.repos.WSRepository
 import org.kodein.di.Kodein
@@ -16,6 +17,7 @@ class App: Application(), KodeinAware {
         bind<Context>("ApplicationContext") with singleton { this@App.applicationContext }
         bind<App>() with singleton { this@App }
         import(networkModule);
+        import(modelsModule);
 
     }
 }

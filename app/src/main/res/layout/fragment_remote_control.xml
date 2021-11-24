@@ -1,47 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
+<layout xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
+        <import type="com.itrkomi.espremotecontrol.ui.converters.DataBindingConverter" />
         <variable
-            name="showReconnect"
-            type="Boolean" />
+            name="ledModel"
+            type="com.itrkomi.espremotecontrol.models.LedModel" />
     </data>
-<androidx.constraintlayout.widget.ConstraintLayout  xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+<androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.remote.RemoteControlFragment">
     <LinearLayout
-        android:id="@+id/layout_reconnect"
+        android:id="@+id/ledWrapper"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:orientation="horizontal"
-        android:padding="8dp"
-        app:show="@{showReconnect}"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:layout_editor_absoluteX="0dp">
+        android:layout_height="match_parent"
+        android:layout_marginTop="9dp"
+        android:orientation="horizontal">
 
         <TextView
-            android:id="@+id/text_reconnect"
+            android:id="@+id/ledText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/btn_reconnect"
-            android:textAlignment="center"
-            android:textSize="20sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:text="@{String.format(@string/led_text, ledModel.brightness)}" />
 
-        <CheckBox
-            android:id="@+id/btn_reconnect"
-            android:layout_width="29dp"
-            android:layout_height="match_parent" />
-
-
+        <SeekBar
+            android:id="@+id/ledBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:max="255"
+            android:progress="@={ledModel.brightness}"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/ledWrapper"/>
     </LinearLayout>
 
-</androidx.constraintlayout.widget.ConstraintLayout >
+</androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
