@@ -2,6 +2,7 @@ package com.itrkomi.espremotecontrol
 
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.Toast
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
@@ -19,21 +20,25 @@ import kotlinx.coroutines.channels.consumeEach
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.kodein
 import org.kodein.di.generic.instance
+import com.google.android.material.snackbar.Snackbar
+
+
+
 
 class MainActivity : AppCompatActivity(), KodeinAware {
     override val kodein by kodein()
     private lateinit var binding: ActivityMainBinding
     private val webSocketListener: WebSocketListener by instance<WebSocketListener>();
     private val wsRepository: WSRepository by instance<WSRepository>();
+    private lateinit var navView: BottomNavigationView;
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        openWebSocket();
-        listenerWebSocket();
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        val navView: BottomNavigationView = binding.navView
-
+        navView = binding.navView
+        openWebSocket();
+        listenerWebSocket();
         val navController = findNavController(R.id.nav_host_fragment_activity_main)
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
@@ -42,38 +47,43 @@ class MainActivity : AppCompatActivity(), KodeinAware {
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
     }
+    private fun showMessage(text: String){
+        Snackbar.make(navView , text, Snackbar.LENGTH_LONG).show()
+    }
+    private fun showMessage(text: String, actionText: String, callBack:() -> Unit){
+        /*val onClick:  (view:View) -> Unit = {
+            callBack()
+        }*/
+        Snackbar.make(navView , text, Snackbar.LENGTH_INDEFINITE)
+            .setAction(actionText) {
+                callBack();
+            }.show();
+    }
 
     private fun openWebSocket(){
-        Toast.makeText(applicationContext, "Подключение к плате...", Toast.LENGTH_SHORT).show()
+        showMessage("Подключение к плате...");
         wsRepository.startSocket(webSocketListener)
     }
 
     private fun closeWebSocket(){
         wsRepository.closeSocket()
     }
-
     private fun listenerWebSocket(){
         CoroutineScope(Dispatchers.Main).launch {
             try {
                 webSocketListener.eventBus.events.consumeEach {
                    if(it.text == "OpenSocket"){
-                       Toast.makeText(applicationContext, "Соединение установлено", Toast.LENGTH_SHORT).show()
+                       showMessage("Соединение установлено");
                    }else if(it.exception is SocketAbortedException){
-                       Toast.makeText(applicationContext, "Соединение разорвано", Toast.LENGTH_SHORT).show()
-                       closeWebSocket();
-                       delay(1000)
-                       openWebSocket();
+                       showMessage("Соединение разорвано","Повторить", ::openWebSocket)
                    }else if(it.exception !== null){
                        it.exception.message?.let { it1 -> Log.e("Error: ", it1) }
-                       Toast.makeText(applicationContext, "Ошибка подключения", Toast.LENGTH_SHORT).show()
-                       closeWebSocket();
-                       delay(1000)
-                       openWebSocket();
+                       showMessage("Ошибка подключения","Повторить", ::openWebSocket)
+
                    }
                 }
             } catch (ex: java.lang.Exception) {
-                Toast.makeText(applicationContext, ex.message, Toast.LENGTH_SHORT).show()
-                openWebSocket();
+                showMessage("Ошибка подключения","Повторить", ::openWebSocket)
             }
         }
     }

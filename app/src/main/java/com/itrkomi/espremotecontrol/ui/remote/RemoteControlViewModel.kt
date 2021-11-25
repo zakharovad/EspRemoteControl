@@ -23,12 +23,13 @@ class RemoteControlViewModel(private val repository: WSRepository, val ledModel:
         });
     }
     private fun sendMessage(ledModel: LedModel){
-        if(::delayJob.isInitialized)
+        repository.sendMessage(ledModel)
+        /*if(::delayJob.isInitialized)
             delayJob.cancel()
         delayJob = ioScope.launch{
             delay(800)
             repository.sendMessage(ledModel)
-        }
+        }*/
     }
     private val _state = MutableLiveData<SocketUpdate>().apply {
         value = null
