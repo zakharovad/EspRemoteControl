@@ -25,6 +25,8 @@ import com.itrkomi.espremotecontrol.models.BaseWSModel
 import com.google.gson.Gson
 import com.google.gson.JsonIOException
 import com.google.gson.JsonSyntaxException
+import com.itrkomi.espremotecontrol.models.LedModel
+import kotlin.reflect.KClass
 
 class MainActivity : AppCompatActivity(), KodeinAware {
     override val kodein by kodein()
@@ -32,7 +34,7 @@ class MainActivity : AppCompatActivity(), KodeinAware {
     private val webSocketListener: WebSocketListener by instance<WebSocketListener>();
     private val wsRepository: WSRepository by instance<WSRepository>();
     private lateinit var navView: BottomNavigationView;
-
+    private val ledModel: LedModel by instance<LedModel>("LedModel");
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -70,6 +72,7 @@ class MainActivity : AppCompatActivity(), KodeinAware {
         wsRepository.closeSocket()
     }
     private fun listenerWebSocket(){
+        //Сделаьб гормальную реализацию
         CoroutineScope(Dispatchers.Main).launch {
             try {
                 webSocketListener.eventBus.events.consumeEach {
@@ -80,12 +83,17 @@ class MainActivity : AppCompatActivity(), KodeinAware {
                           Log.d("parse json: ",it.text)
                           var gson = Gson()
                           try{
-                              var baseWSModel = gson.fromJson(it.text, BaseWSModel::class.java)
-                              Log.d("baseWSModel",baseWSModel.type)
+                              var model = gson.fromJson(it.text, BaseWSModel::class.java)
+                              val ledModelClass = LedModel::class.java
+                              when(model.type){
+                                  ledModelClass.simpleName ->{
+                                      var lModel = gson.fromJson(it.text, ledModelClass)
+                                      ledModel.brightness = lModel.brightness
+                                  }
+                              }
                           }catch(e: JsonSyntaxException){
                               Log.d("JsonSyntaxException","============================")
                           }
-
 
                       }
 

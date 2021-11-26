@@ -11,7 +11,7 @@ class LedModel : BaseWSModel(), Parcelable {
         type = javaClass.simpleName
     }
     @Bindable
-    var brightness: Int = 100
+    var brightness: Int = 0
         set(value){
             if(field == value){
                 return
