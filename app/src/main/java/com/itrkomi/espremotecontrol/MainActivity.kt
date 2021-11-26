@@ -21,9 +21,10 @@ import org.kodein.di.KodeinAware
 import org.kodein.di.android.kodein
 import org.kodein.di.generic.instance
 import com.google.android.material.snackbar.Snackbar
-
-
-
+import com.itrkomi.espremotecontrol.models.BaseWSModel
+import com.google.gson.Gson
+import com.google.gson.JsonIOException
+import com.google.gson.JsonSyntaxException
 
 class MainActivity : AppCompatActivity(), KodeinAware {
     override val kodein by kodein()
@@ -72,9 +73,24 @@ class MainActivity : AppCompatActivity(), KodeinAware {
         CoroutineScope(Dispatchers.Main).launch {
             try {
                 webSocketListener.eventBus.events.consumeEach {
-                   if(it.text == "OpenSocket"){
-                       showMessage("Соединение установлено");
-                   }else if(it.exception is SocketAbortedException){
+                  if(it.text !== null){
+                      if(it.text == "OpenSocket"){
+                          showMessage("Соединение установлено");
+                      }else{
+                          Log.d("parse json: ",it.text)
+                          var gson = Gson()
+                          try{
+                              var baseWSModel = gson.fromJson(it.text, BaseWSModel::class.java)
+                              Log.d("baseWSModel",baseWSModel.type)
+                          }catch(e: JsonSyntaxException){
+                              Log.d("JsonSyntaxException","============================")
+                          }
+
+
+                      }
+
+                  }
+                   else if(it.exception is SocketAbortedException){
                        showMessage("Соединение разорвано","Повторить", ::openWebSocket)
                    }else if(it.exception !== null){
                        it.exception.message?.let { it1 -> Log.e("Error: ", it1) }

@@ -6,7 +6,7 @@ import com.itrkomi.espremotecontrol.BR
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
-class LedModel : SendEvent(), Parcelable {
+class LedModel : BaseWSModel(), Parcelable {
     init {
         type = javaClass.simpleName
     }

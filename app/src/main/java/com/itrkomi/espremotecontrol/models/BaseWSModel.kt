@@ -2,6 +2,6 @@ package com.itrkomi.espremotecontrol.models
 
 import androidx.databinding.BaseObservable
 
-abstract  class SendEvent: BaseObservable() {
+open  class BaseWSModel: BaseObservable() {
     open var type:String =""
 }

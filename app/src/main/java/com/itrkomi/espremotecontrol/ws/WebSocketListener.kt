@@ -1,5 +1,6 @@
 package com.itrkomi.espremotecontrol.ws
 
+import android.util.Log
 import com.itrkomi.espremotecontrol.ws.models.SocketUpdate
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.GlobalScope
