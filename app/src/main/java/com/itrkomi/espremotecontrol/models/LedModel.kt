@@ -10,6 +10,9 @@ class LedModel : BaseWSModel(), Parcelable {
     init {
         type = javaClass.simpleName
     }
+    fun <T:LedModel> update(from:T){
+        this.brightness = from?.brightness
+    }
     @Bindable
     var brightness: Int = 0
         set(value){

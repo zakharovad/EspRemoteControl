@@ -2,6 +2,7 @@ package com.itrkomi.espremotecontrol.ui.remote
 
 import androidx.databinding.Observable
 import androidx.lifecycle.MutableLiveData
+import com.itrkomi.espremotecontrol.WebSocketService
 import com.itrkomi.espremotecontrol.models.LedModel
 import com.itrkomi.espremotecontrol.repos.WSRepository
 import com.itrkomi.espremotecontrol.ui.base.BaseViewModel
@@ -12,8 +13,8 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 
-class RemoteControlViewModel(private val repository: WSRepository, val ledModel: LedModel) : BaseViewModel() {
-    lateinit var delayJob: Job
+class RemoteControlViewModel( val ledModel: LedModel) : BaseViewModel() {
+    private var wsService:WebSocketService? = null
     init {
 
         ledModel.addOnPropertyChangedCallback(object : Observable.OnPropertyChangedCallback() {
@@ -22,21 +23,10 @@ class RemoteControlViewModel(private val repository: WSRepository, val ledModel:
             }
         });
     }
+    fun addWsService(service:WebSocketService){
+        wsService = service
+    }
     private fun sendMessage(ledModel: LedModel){
-        repository.sendMessage(ledModel)
-        /*if(::delayJob.isInitialized)
-            delayJob.cancel()
-        delayJob = ioScope.launch{
-            delay(800)
-            repository.sendMessage(ledModel)
-        }*/
-    }
-    private val _state = MutableLiveData<SocketUpdate>().apply {
-        value = null
-    }
-
-
-    override fun onCleared() {
-        super.onCleared()
+        wsService?.sendMessage(ledModel)
     }
 }

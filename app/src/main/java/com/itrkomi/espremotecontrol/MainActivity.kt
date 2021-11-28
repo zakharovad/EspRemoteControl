@@ -1,6 +1,11 @@
 package com.itrkomi.espremotecontrol
 
+import android.content.ComponentName
+import android.content.Context
+import android.content.Intent
+import android.content.ServiceConnection
 import android.os.Bundle
+import android.os.IBinder
 import android.util.Log
 import android.view.View
 import android.widget.Toast
@@ -25,38 +30,52 @@ import com.itrkomi.espremotecontrol.models.BaseWSModel
 import com.google.gson.Gson
 import com.google.gson.JsonIOException
 import com.google.gson.JsonSyntaxException
+import com.itrkomi.espremotecontrol.models.ExceptionSocketModel
 import com.itrkomi.espremotecontrol.models.LedModel
+import com.itrkomi.espremotecontrol.models.OpenSocketModel
 import kotlin.reflect.KClass
 
 class MainActivity : AppCompatActivity(), KodeinAware {
     override val kodein by kodein()
     private lateinit var binding: ActivityMainBinding
-    private val webSocketListener: WebSocketListener by instance<WebSocketListener>();
-    private val wsRepository: WSRepository by instance<WSRepository>();
+    private var  wsService: WebSocketService? = null;
+    private val connection  = object : ServiceConnection {
+        override fun onServiceConnected(className: ComponentName?, service: IBinder) {
+            val binder = service as WebSocketService.WebSocketBinder
+            wsService = binder.getService()
+            listenerWebSocket()
+        }
+        override fun onServiceDisconnected(className: ComponentName) {
+            wsService = null
+        }
+    }
     private lateinit var navView: BottomNavigationView;
     private val ledModel: LedModel by instance<LedModel>("LedModel");
+    override fun onStart() {
+        super.onStart()
+        // Bind to WebSocketService
+        Intent(this, WebSocketService::class.java).also { intent ->
+            bindService(intent, connection, Context.BIND_AUTO_CREATE)
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         navView = binding.navView
-        openWebSocket();
-        listenerWebSocket();
         val navController = findNavController(R.id.nav_host_fragment_activity_main)
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
         val appBarConfiguration = AppBarConfiguration(setOf(
                 R.id.navigation_home, R.id.navigation_remote_control, R.id.navigation_notifications))
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
     }
+
     private fun showMessage(text: String){
         Snackbar.make(navView , text, Snackbar.LENGTH_LONG).show()
     }
+
     private fun showMessage(text: String, actionText: String, callBack:() -> Unit){
-        /*val onClick:  (view:View) -> Unit = {
-            callBack()
-        }*/
         Snackbar.make(navView , text, Snackbar.LENGTH_INDEFINITE)
             .setAction(actionText) {
                 callBack();
@@ -65,49 +84,35 @@ class MainActivity : AppCompatActivity(), KodeinAware {
 
     private fun openWebSocket(){
         showMessage("Подключение к плате...");
-        wsRepository.startSocket(webSocketListener)
+        wsService?.openWebSocket()
     }
 
     private fun closeWebSocket(){
-        wsRepository.closeSocket()
+        wsService?.closeWebSocket()
     }
     private fun listenerWebSocket(){
-        //Сделаьб гормальную реализацию
+        //Сделать нормальную реализацию
         CoroutineScope(Dispatchers.Main).launch {
             try {
-                webSocketListener.eventBus.events.consumeEach {
-                  if(it.text !== null){
-                      if(it.text == "OpenSocket"){
-                          showMessage("Соединение установлено");
-                      }else{
-                          Log.d("parse json: ",it.text)
-                          var gson = Gson()
-                          try{
-                              var model = gson.fromJson(it.text, BaseWSModel::class.java)
-                              val ledModelClass = LedModel::class.java
-                              when(model.type){
-                                  ledModelClass.simpleName ->{
-                                      var lModel = gson.fromJson(it.text, ledModelClass)
-                                      ledModel.brightness = lModel.brightness
-                                  }
-                              }
-                          }catch(e: JsonSyntaxException){
-                              Log.d("JsonSyntaxException","============================")
-                          }
+                wsService?.events?.consumeEach {
+                    when(it){
+                        is OpenSocketModel->{
+                            showMessage("Соединение установлено");
+                        }
+                        is LedModel->{
+                            ledModel.update(it)
+                        }
+                        is SocketAbortedException->{
+                            showMessage("Соединение разорвано","Повторить", ::openWebSocket)
+                        }
+                        is ExceptionSocketModel ->{
+                            showMessage(it.message,"Повторить", ::openWebSocket)
+                        }
 
-                      }
-
-                  }
-                   else if(it.exception is SocketAbortedException){
-                       showMessage("Соединение разорвано","Повторить", ::openWebSocket)
-                   }else if(it.exception !== null){
-                       it.exception.message?.let { it1 -> Log.e("Error: ", it1) }
-                       showMessage("Ошибка подключения","Повторить", ::openWebSocket)
-
-                   }
+                    }
                 }
             } catch (ex: java.lang.Exception) {
-                showMessage("Ошибка подключения","Повторить", ::openWebSocket)
+                showMessage("Упс, что то пошло не так! Попробуй переподключиться","Повторить", ::openWebSocket)
             }
         }
     }
