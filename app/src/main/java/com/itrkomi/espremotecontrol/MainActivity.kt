@@ -6,9 +6,6 @@ import android.content.Intent
 import android.content.ServiceConnection
 import android.os.Bundle
 import android.os.IBinder
-import android.util.Log
-import android.view.View
-import android.widget.Toast
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
@@ -16,10 +13,7 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.itrkomi.espremotecontrol.databinding.ActivityMainBinding
-import com.itrkomi.espremotecontrol.repos.WSRepository
 import com.itrkomi.espremotecontrol.ws.SocketAbortedException
-import com.itrkomi.espremotecontrol.ws.WebSocketListener
-import com.itrkomi.espremotecontrol.ws.models.SocketUpdate
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.consumeEach
 import org.kodein.di.KodeinAware
@@ -65,8 +59,7 @@ class MainActivity : AppCompatActivity(), KodeinAware {
         setContentView(binding.root)
         navView = binding.navView
         val navController = findNavController(R.id.nav_host_fragment_activity_main)
-        val appBarConfiguration = AppBarConfiguration(setOf(
-                R.id.navigation_home, R.id.navigation_remote_control, R.id.navigation_notifications))
+        val appBarConfiguration = AppBarConfiguration(setOf(R.id.navigation_remote_control))
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
     }

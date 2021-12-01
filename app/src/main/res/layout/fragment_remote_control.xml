@@ -5,36 +5,124 @@
     <data>
         <import type="com.itrkomi.espremotecontrol.ui.converters.DataBindingConverter" />
         <variable
-            name="ledModel"
-            type="com.itrkomi.espremotecontrol.models.LedModel" />
+            name="viewModel"
+            type="com.itrkomi.espremotecontrol.ui.remote.RemoteControlViewModel" />
+
     </data>
-<androidx.constraintlayout.widget.ConstraintLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".ui.remote.RemoteControlFragment">
-    <LinearLayout
-        android:id="@+id/ledWrapper"
+
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="9dp"
-        android:orientation="horizontal">
-
-        <TextView
-            android:id="@+id/ledText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@{String.format(@string/led_text, ledModel.brightness)}" />
-
-        <SeekBar
-            android:id="@+id/ledBar"
+        android:layout_height="match_parent">
+        <RelativeLayout
+            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:max="255"
-            android:progress="@={ledModel.brightness}"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/ledWrapper"/>
-    </LinearLayout>
+            android:layout_height="match_parent">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+            <LinearLayout
+                android:id="@+id/ledWrapper"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:gravity="center"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:id="@+id/ledText"
+                        android:textSize="32sp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@{String.format(@string/led_scale, viewModel.ledModel.brightness)}" />
+                </LinearLayout>
+                <SeekBar
+                    android:id="@+id/ledBar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:max="255"
+                    android:progress="@={viewModel.ledModel.brightness}"
+                    android:layout_marginTop="20dp" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_gravity="center_horizontal"
+                android:layout_centerVertical="true"
+                android:id="@+id/controlWrapper"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:foregroundGravity="fill_horizontal"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:id="@+id/leftPanel"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <ImageButton
+                        android:id="@+id/buttonForward"
+                        style="@style/Widget.AppCompat.Light.ActionButton"
+                        android:scaleType="fitCenter"
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="parent"
+                        app:srcCompat="@drawable/forward" />
+
+                    <ImageButton
+                        android:id="@+id/buttonBack"
+                        style="@style/Widget.AppCompat.Light.ActionButton"
+                        android:scaleType="fitCenter"
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="parent"
+                        app:srcCompat="@drawable/back" />
+
+                </LinearLayout>
+                <TextView
+                    android:id="@+id/speedText"
+                    android:textSize="20sp"
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="@{String.format(@string/speed_scale, viewModel.driveModel.speed)}" />
+                <LinearLayout
+                    android:id="@+id/rightPanel"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <ImageButton
+                        android:id="@+id/buttonRight"
+                        style="@style/Widget.AppCompat.Light.ActionButton"
+                        android:scaleType="fitCenter"
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="parent"
+                        app:srcCompat="@drawable/right" />
+
+                    <ImageButton
+                        android:id="@+id/buttonLeft"
+                        style="@style/Widget.AppCompat.Light.ActionButton"
+                        android:scaleType="fitCenter"
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="parent"
+                        app:srcCompat="@drawable/left" />
+
+                </LinearLayout>
+            </LinearLayout>
+        </RelativeLayout>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
