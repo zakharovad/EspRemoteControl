@@ -67,21 +67,10 @@ class RemoteControlFragment : Fragment(), KodeinAware {
         return root
     }
     fun onButtonPress(){
-        val repeatListener = RepeatListener(400, 100,
-            object:View.OnClickListener{
-                override fun onClick(p0: View?) {
-                    viewModel.driveModelSpeedUp()
-                }
-            },
-            object:View.OnClickListener{
-                override fun onClick(p0: View?) {
-                    viewModel.driveModelSpeedZero()
-                }
-        })
-        binding.buttonForward.setOnTouchListener(repeatListener);
-        binding.buttonBack.setOnTouchListener(repeatListener);
-        binding.buttonLeft.setOnTouchListener(repeatListener);
-        binding.buttonRight.setOnTouchListener(repeatListener);
+        viewModel.bindForwardButton(binding.buttonForward);
+        viewModel.bindBackButton(binding.buttonBack);
+        viewModel.bindLeftButton(binding.buttonLeft);
+        viewModel.bindRightButton(binding.buttonRight);
     }
     override fun onDestroyView() {
         super.onDestroyView()
