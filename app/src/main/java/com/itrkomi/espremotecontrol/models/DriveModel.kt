@@ -28,7 +28,7 @@ class DriveModel : BaseWSModel(), Parcelable {
             if(field == value){
                 return
             }
-            field = field and value
+            field = value
             notifyPropertyChanged(BR.direction)
         }
 }

@@ -77,16 +77,4 @@ class RemoteControlFragment : Fragment(), KodeinAware {
         doUnbindWsService()
         _binding = null
     }
-    inner class UpButtonListener():View.OnTouchListener{
-        override fun onTouch(view: View?, event: MotionEvent?): Boolean {
-            if (event != null) {
-                if (event.action == MotionEvent.ACTION_UP){
-                    viewModel.driveModelSpeedZero()
-                }
-
-            }
-            return true;
-        }
-
-    }
 }

@@ -1,20 +1,20 @@
 package com.itrkomi.espremotecontrol.ui.remote
 
 import RepeatListener
+import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import androidx.databinding.Observable
 import androidx.lifecycle.MutableLiveData
 import com.itrkomi.espremotecontrol.WebSocketService
+import com.itrkomi.espremotecontrol.models.BaseWSModel
 import com.itrkomi.espremotecontrol.models.DriveModel
 import com.itrkomi.espremotecontrol.models.LedModel
 import com.itrkomi.espremotecontrol.repos.WSRepository
 import com.itrkomi.espremotecontrol.ui.base.BaseViewModel
 
 import com.itrkomi.espremotecontrol.ws.models.SocketUpdate
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 
 
 class RemoteControlViewModel( val ledModel: LedModel,  val driveModel: DriveModel) : BaseViewModel() {
@@ -24,84 +24,91 @@ class RemoteControlViewModel( val ledModel: LedModel,  val driveModel: DriveMode
         F, B, L, R
     }
     private val  step:Int = 10;
-    private val _btnPressedIndicator:MutableLiveData<Int> = MutableLiveData(0);
     init {
-
         ledModel.addOnPropertyChangedCallback(object : Observable.OnPropertyChangedCallback() {
             override fun onPropertyChanged(sender: Observable?, propertyId: Int) {
                 sendMessage(ledModel)
             }
         });
+        driveModel.addOnPropertyChangedCallback(object : Observable.OnPropertyChangedCallback() {
+            override fun onPropertyChanged(sender: Observable?, propertyId: Int) {
+                if(driveModel.direction  === 0){
+                    speedChange(0)
+                }
+                sendMessage(driveModel)
+            }
+        });
+
     }
     fun addWsService(service:WebSocketService){
         wsService = service
     }
-    private fun sendMessage(ledModel: LedModel){
-        wsService?.sendMessage(ledModel)
+    private fun sendMessage(model: BaseWSModel){
+        wsService?.sendMessage(model)
     }
-    fun driveModelSpeedUp() {
-        driveModel.speed += step;2
+
+    fun speedChange(value:Int? = null) {
+        driveModel.speed  = if(value !== null) value.coerceIn(0, 255) else driveModel.speed+step
+        /*if(::speedChangeJob.isInitialized){
+            speedChangeJob.cancel()
+        }*/
+        /*speedChangeJob = ioScope.launch (ioScope.coroutineContext + SupervisorJob()){
+            delay(100)
+            driveModel.speed  = value.coerceIn(0, 255);
+        }*/
     }
-    fun driveModelSpeedZero() {
-        driveModel.speed  = 0;
-    }
-    fun removeDirectionBit(value:Int?, direction: Direction = Direction.F): Int{
-        if(value === null){
-            return 0
-        }
-        when(direction){
+
+    fun removeDirectionBit(directionType: Direction = Direction.F){
+
+        when(directionType){
             Direction.F ->{
-                return value and(14)
+                driveModel.direction =  driveModel.direction and(14)
             }
             Direction.B ->{
-                return value and(13)
+                driveModel.direction =  driveModel.direction and(13)
             }
             Direction.L ->{
-                return value and(11)
+                driveModel.direction =  driveModel.direction and(11)
             }
             Direction.R ->{
-                return value and(7)
+                driveModel.direction =  driveModel.direction and(7)
             }
 
         }
-        return 0
     }
 
-    fun setDirectionBit(value:Int?, direction: Direction = Direction.F): Int{
-        if(value === null){
-            return 0
-        }
-        when(direction){
+    fun setDirectionBit(directionType: Direction = Direction.F){
+
+        when(directionType){
             Direction.F ->{
-                return value or(1) and(13)
+                driveModel.direction =  driveModel.direction or(1) and(13)
             }
             Direction.B ->{
-                return value or(2) and(14)
+                driveModel.direction =  driveModel.direction or(2) and(14)
             }
             Direction.L ->{
-                return value or(4) and(7)
+                driveModel.direction =  driveModel.direction or(4) and(7)
             }
             Direction.R ->{
-                return value or(8) and(11)
+                driveModel.direction =  driveModel.direction or(8) and(11)
             }
 
 
         }
-        return 0
+
     }
 
     fun bindForwardButton(button: View){
         val listener = RepeatListener(400, 100,
             object:View.OnClickListener{
                 override fun onClick(p0: View?) {
-                    driveModel.direction = setDirectionBit(driveModel.direction, Direction.F)
-                    driveModelSpeedUp()
+                    setDirectionBit(Direction.F)
+                    speedChange();
                 }
             },
             object:View.OnClickListener{
                 override fun onClick(p0: View?) {
-                    driveModel.direction = removeDirectionBit(driveModel.direction, Direction.F)
-                    driveModelSpeedZero()
+                    removeDirectionBit(Direction.F)
                 }
             })
         button.setOnTouchListener(listener);
@@ -111,14 +118,13 @@ class RemoteControlViewModel( val ledModel: LedModel,  val driveModel: DriveMode
         val listener = RepeatListener(400, 100,
             object:View.OnClickListener{
                 override fun onClick(p0: View?) {
-                    driveModel.direction =setDirectionBit(driveModel.direction, Direction.B)
-                    driveModelSpeedUp()
+                    setDirectionBit(Direction.B)
+                    speedChange(driveModel.speed+step)
                 }
             },
             object:View.OnClickListener{
                 override fun onClick(p0: View?) {
-                    driveModel.direction = removeDirectionBit(driveModel.direction, Direction.B)
-                    driveModelSpeedZero()
+                    removeDirectionBit(Direction.B)
                 }
             })
         button.setOnTouchListener(listener);
@@ -128,14 +134,13 @@ class RemoteControlViewModel( val ledModel: LedModel,  val driveModel: DriveMode
         val listener = RepeatListener(400, 100,
             object:View.OnClickListener{
                 override fun onClick(p0: View?) {
-                    driveModel.direction = setDirectionBit(driveModel.direction, Direction.L)
-                    driveModelSpeedUp()
+                    setDirectionBit(Direction.L)
+                    speedChange()
                 }
             },
             object:View.OnClickListener{
                 override fun onClick(p0: View?) {
-                    driveModel.direction = removeDirectionBit(driveModel.direction, Direction.L)
-                    driveModelSpeedZero()
+                    removeDirectionBit(Direction.L)
                 }
             })
         button.setOnTouchListener(listener);
@@ -145,14 +150,13 @@ class RemoteControlViewModel( val ledModel: LedModel,  val driveModel: DriveMode
         val listener = RepeatListener(400, 100,
             object:View.OnClickListener{
                 override fun onClick(p0: View?) {
-                    driveModel.direction = setDirectionBit(driveModel.direction, Direction.R)
-                    driveModelSpeedUp()
+                    setDirectionBit(Direction.R)
+                    speedChange()
                 }
             },
             object:View.OnClickListener{
                 override fun onClick(p0: View?) {
-                    driveModel.direction = removeDirectionBit(driveModel.direction, Direction.R)
-                    driveModelSpeedZero()
+                    removeDirectionBit(Direction.R)
                 }
             })
         button.setOnTouchListener(listener);
