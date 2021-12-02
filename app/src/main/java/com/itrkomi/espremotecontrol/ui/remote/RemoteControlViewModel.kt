@@ -98,65 +98,17 @@ class RemoteControlViewModel( val ledModel: LedModel,  val driveModel: DriveMode
 
     }
 
-    fun bindForwardButton(button: View){
+    fun bindDirectionButton(button: View, type: Direction){
         val listener = RepeatListener(400, 100,
             object:View.OnClickListener{
                 override fun onClick(p0: View?) {
-                    setDirectionBit(Direction.F)
+                    setDirectionBit(type)
                     speedChange();
                 }
             },
             object:View.OnClickListener{
                 override fun onClick(p0: View?) {
-                    removeDirectionBit(Direction.F)
-                }
-            })
-        button.setOnTouchListener(listener);
-    }
-
-    fun bindBackButton(button: View){
-        val listener = RepeatListener(400, 100,
-            object:View.OnClickListener{
-                override fun onClick(p0: View?) {
-                    setDirectionBit(Direction.B)
-                    speedChange(driveModel.speed+step)
-                }
-            },
-            object:View.OnClickListener{
-                override fun onClick(p0: View?) {
-                    removeDirectionBit(Direction.B)
-                }
-            })
-        button.setOnTouchListener(listener);
-    }
-
-    fun bindLeftButton(button: View){
-        val listener = RepeatListener(400, 100,
-            object:View.OnClickListener{
-                override fun onClick(p0: View?) {
-                    setDirectionBit(Direction.L)
-                    speedChange()
-                }
-            },
-            object:View.OnClickListener{
-                override fun onClick(p0: View?) {
-                    removeDirectionBit(Direction.L)
-                }
-            })
-        button.setOnTouchListener(listener);
-    }
-
-    fun bindRightButton(button: View){
-        val listener = RepeatListener(400, 100,
-            object:View.OnClickListener{
-                override fun onClick(p0: View?) {
-                    setDirectionBit(Direction.R)
-                    speedChange()
-                }
-            },
-            object:View.OnClickListener{
-                override fun onClick(p0: View?) {
-                    removeDirectionBit(Direction.R)
+                    removeDirectionBit(type)
                 }
             })
         button.setOnTouchListener(listener);

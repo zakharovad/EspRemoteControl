@@ -67,10 +67,10 @@ class RemoteControlFragment : Fragment(), KodeinAware {
         return root
     }
     fun onButtonPress(){
-        viewModel.bindForwardButton(binding.buttonForward);
-        viewModel.bindBackButton(binding.buttonBack);
-        viewModel.bindLeftButton(binding.buttonLeft);
-        viewModel.bindRightButton(binding.buttonRight);
+        viewModel.bindDirectionButton(binding.buttonForward, RemoteControlViewModel.Direction.F);
+        viewModel.bindDirectionButton(binding.buttonBack, RemoteControlViewModel.Direction.B);
+        viewModel.bindDirectionButton(binding.buttonLeft, RemoteControlViewModel.Direction.L);
+        viewModel.bindDirectionButton(binding.buttonRight, RemoteControlViewModel.Direction.R);
     }
     override fun onDestroyView() {
         super.onDestroyView()
