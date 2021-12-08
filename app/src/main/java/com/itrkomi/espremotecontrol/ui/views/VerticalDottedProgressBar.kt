@@ -5,6 +5,7 @@ import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
 import android.util.AttributeSet
+import android.util.Log
 import android.view.View
 
 
@@ -65,10 +66,10 @@ class VerticalDottedProgressBar @JvmOverloads constructor(
             paint.color = FINISHED
             drawSections(0, SECTIONS_COUNT, canvas, paint)
         } else {
-            val filledCount = SECTIONS_COUNT * mProgress / mMax
-            paint.color = PROCEED
-            drawSections(0, filledCount, canvas, paint)
+            val filledCount = SECTIONS_COUNT - SECTIONS_COUNT * mProgress / mMax
             paint.color = REMAIN
+            drawSections(0, filledCount, canvas, paint)
+            paint.color = PROCEED
             drawSections(filledCount, SECTIONS_COUNT, canvas, paint)
         }
     }
