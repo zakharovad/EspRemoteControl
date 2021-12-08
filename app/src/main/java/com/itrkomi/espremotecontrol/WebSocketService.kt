@@ -51,6 +51,9 @@ class WebSocketService : Service(), KodeinAware {
 
     }
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        if(!wsRepository.isStarted()){
+            openWebSocket()
+        }
         return super.onStartCommand(intent, flags, startId)
     }
     fun <T : BaseWSModel> sendMessage(event: T) {

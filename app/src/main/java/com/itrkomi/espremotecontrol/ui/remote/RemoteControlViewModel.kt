@@ -23,7 +23,7 @@ class RemoteControlViewModel( val ledModel: LedModel,  val driveModel: DriveMode
     enum class Direction {
         F, B, L, R
     }
-    private val  step:Int = 10;
+    private val  step:Int = 50;
     init {
         ledModel.addOnPropertyChangedCallback(object : Observable.OnPropertyChangedCallback() {
             override fun onPropertyChanged(sender: Observable?, propertyId: Int) {
