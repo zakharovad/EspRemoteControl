@@ -6,7 +6,6 @@
             android:valueTo="1.0"
             android:valueFrom="0.0"
             android:valueType="floatType"
-            android:delay="1000"
-            android:duration="4000" />
+            android:duration="2000" />
 
 </set>

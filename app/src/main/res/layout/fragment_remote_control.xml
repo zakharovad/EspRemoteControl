@@ -12,7 +12,9 @@
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:gravity="top"
+            >
 
             <LinearLayout
                 android:id="@+id/ledWrapper"
@@ -43,93 +45,107 @@
                     android:max="255"
                     android:progress="@={viewModel.ledModel.brightness}" />
             </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/controlWrapper"
+            <RelativeLayout
+                android:gravity="center"
+                android:layout_weight="2"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:baselineAligned="false"
-                android:foregroundGravity="center_vertical"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
-
+                 android:layout_height="match_parent">
                 <LinearLayout
-                    android:id="@+id/leftPanel"
-                    android:layout_width="0dp"
+                    android:id="@+id/controlWrapper"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="2"
+                    android:baselineAligned="false"
                     android:gravity="center"
-                    android:orientation="vertical">
+                    android:orientation="horizontal">
 
-                    <ImageButton
-                        android:id="@+id/buttonForward"
-                        style="@style/Widget.AppCompat.Light.ActionButton"
-                        android:layout_width="100dp"
-                        android:layout_height="100dp"
-                        android:scaleType="fitCenter"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="parent"
-                        app:srcCompat="@drawable/forward" />
-
-                    <ImageButton
-                        android:id="@+id/buttonBack"
-                        style="@style/Widget.AppCompat.Light.ActionButton"
-                        android:layout_width="100dp"
-                        android:layout_height="100dp"
-                        android:scaleType="fitCenter"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="parent"
-                        app:srcCompat="@drawable/back" />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/speedWrap"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:orientation="vertical">
-
-                    <com.itrkomi.espremotecontrol.ui.views.VerticalDottedProgressBar
-                        android:id="@+id/speedBar"
-                        android:layout_width="30dp"
-                        android:layout_height="300dp"
+                    <LinearLayout
+                        android:id="@+id/leftPanel"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="2"
                         android:gravity="center"
-                        android:max="@{255}"
-                        android:progress="@{viewModel.driveModel.speed}" />
+                        android:orientation="vertical">
+
+                        <ImageButton
+                            android:id="@+id/buttonForward"
+                            style="@style/Widget.AppCompat.Light.ActionButton"
+                            android:layout_width="100dp"
+                            android:layout_height="100dp"
+                            android:scaleType="fitCenter"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="parent"
+                            app:srcCompat="@drawable/forward" />
+
+                        <ImageButton
+                            android:id="@+id/buttonBack"
+                            style="@style/Widget.AppCompat.Light.ActionButton"
+                            android:layout_width="100dp"
+                            android:layout_height="100dp"
+                            android:scaleType="fitCenter"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="parent"
+                            app:srcCompat="@drawable/back" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/speedWrap"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:orientation="vertical">
+                        <ImageButton
+                            android:id="@+id/buttonBuzzer"
+                            style="@style/Widget.AppCompat.Light.ActionButton"
+                            android:layout_width="100dp"
+                            android:layout_height="100dp"
+                            android:scaleType="fitCenter"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="parent"
+                            app:srcCompat="@drawable/buzzer" />
+                        <com.itrkomi.espremotecontrol.ui.views.VerticalDottedProgressBar
+                            android:id="@+id/speedBar"
+                            android:layout_width="30dp"
+                            android:layout_height="100dp"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:max="@{255}"
+                            android:progress="@{viewModel.driveModel.speed}" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/rightPanel"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="2"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <ImageButton
+                            android:id="@+id/buttonRight"
+                            style="@style/Widget.AppCompat.Light.ActionButton"
+                            android:layout_width="100dp"
+                            android:layout_height="100dp"
+                            android:scaleType="fitCenter"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="parent"
+                            app:srcCompat="@drawable/right" />
+
+                        <ImageButton
+                            android:id="@+id/buttonLeft"
+                            style="@style/Widget.AppCompat.Light.ActionButton"
+                            android:layout_width="100dp"
+                            android:layout_height="100dp"
+                            android:scaleType="fitCenter"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="parent"
+                            app:srcCompat="@drawable/left" />
+
+                    </LinearLayout>
                 </LinearLayout>
+            </RelativeLayout>
 
-                <LinearLayout
-                    android:id="@+id/rightPanel"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="2"
-                    android:gravity="center"
-                    android:orientation="vertical">
-
-                    <ImageButton
-                        android:id="@+id/buttonRight"
-                        style="@style/Widget.AppCompat.Light.ActionButton"
-                        android:layout_width="100dp"
-                        android:layout_height="100dp"
-                        android:scaleType="fitCenter"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="parent"
-                        app:srcCompat="@drawable/right" />
-
-                    <ImageButton
-                        android:id="@+id/buttonLeft"
-                        style="@style/Widget.AppCompat.Light.ActionButton"
-                        android:layout_width="100dp"
-                        android:layout_height="100dp"
-                        android:scaleType="fitCenter"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="parent"
-                        app:srcCompat="@drawable/left" />
-
-                </LinearLayout>
-            </LinearLayout>
         </LinearLayout >
 
 </layout>

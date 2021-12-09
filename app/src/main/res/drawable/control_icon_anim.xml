@@ -4,22 +4,14 @@
         android:name="rotationGroup"
         android:animation="@animator/rotation" />
     <target
-        android:name="pathAlpha"
-        android:animation="@animator/alpha" />
-    <target
-        android:name="pathAlpha2"
-        android:animation="@animator/alpha" />
-    <target
-        android:name="pathAlpha3"
-        android:animation="@animator/alpha" />
-    <target
-        android:name="pathAlpha4"
-        android:animation="@animator/alpha" />
-    <target
-        android:name="pathAlpha5"
-        android:animation="@animator/alpha" />
+        android:name="rightStick"
+        android:animation="@animator/rotation" />
     <target
         android:name="pathAlpha6"
-        android:animation="@animator/alpha" />
+        android:animation="@animator/trim" />
+    <target
+        android:name="pathAlpha5"
+        android:animation="@animator/trim" />
+
 
 </animated-vector>
