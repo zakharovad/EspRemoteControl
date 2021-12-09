@@ -19,6 +19,8 @@ class SplashScreenActivity : AppCompatActivity() {
         (binding.splashScreenImage.drawable as? Animatable)?.start()
 
         val intent = Intent(this, MainActivity::class.java)
+
+
         CoroutineScope(Dispatchers.Main).launch{
             delay(3000)
             startActivity(intent)

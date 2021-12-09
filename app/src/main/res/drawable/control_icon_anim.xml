@@ -3,4 +3,23 @@
     <target
         android:name="rotationGroup"
         android:animation="@animator/rotation" />
+    <target
+        android:name="pathAlpha"
+        android:animation="@animator/alpha" />
+    <target
+        android:name="pathAlpha2"
+        android:animation="@animator/alpha" />
+    <target
+        android:name="pathAlpha3"
+        android:animation="@animator/alpha" />
+    <target
+        android:name="pathAlpha4"
+        android:animation="@animator/alpha" />
+    <target
+        android:name="pathAlpha5"
+        android:animation="@animator/alpha" />
+    <target
+        android:name="pathAlpha6"
+        android:animation="@animator/alpha" />
+
 </animated-vector>
