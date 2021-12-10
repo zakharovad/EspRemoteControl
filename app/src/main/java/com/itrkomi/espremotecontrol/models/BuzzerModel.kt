@@ -22,8 +22,6 @@ class BuzzerModel : BaseWSModel(), Parcelable {
         150, 350, 250, 100, 100, 100, 450,
         150, 350, 250, 100, 750)
 
-    val countNotes: Int = frequences.size
-
     fun <T:BuzzerModel> update(from:T){
         this.active = from?.active
     }
