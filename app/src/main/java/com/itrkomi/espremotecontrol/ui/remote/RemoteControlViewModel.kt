@@ -1,13 +1,16 @@
 package com.itrkomi.espremotecontrol.ui.remote
 
 import RepeatListener
+import android.graphics.drawable.Animatable
 import android.util.Log
 import android.view.MotionEvent
 import android.view.View
+import android.widget.ImageButton
 import androidx.databinding.Observable
 import androidx.lifecycle.MutableLiveData
 import com.itrkomi.espremotecontrol.WebSocketService
 import com.itrkomi.espremotecontrol.models.BaseWSModel
+import com.itrkomi.espremotecontrol.models.BuzzerModel
 import com.itrkomi.espremotecontrol.models.DriveModel
 import com.itrkomi.espremotecontrol.models.LedModel
 import com.itrkomi.espremotecontrol.repos.WSRepository
@@ -17,13 +20,13 @@ import com.itrkomi.espremotecontrol.ws.models.SocketUpdate
 import kotlinx.coroutines.*
 
 
-class RemoteControlViewModel( val ledModel: LedModel,  val driveModel: DriveModel) : BaseViewModel() {
+class RemoteControlViewModel( val ledModel: LedModel,  val driveModel: DriveModel, private val buzzerModel: BuzzerModel) : BaseViewModel() {
     private var wsService:WebSocketService? = null
 
     enum class Direction {
         F, B, L, R
     }
-    private val  step:Int = 50;
+    private val step:Int = 50;
     init {
         ledModel.addOnPropertyChangedCallback(object : Observable.OnPropertyChangedCallback() {
             override fun onPropertyChanged(sender: Observable?, propertyId: Int) {
@@ -38,6 +41,12 @@ class RemoteControlViewModel( val ledModel: LedModel,  val driveModel: DriveMode
                 sendMessage(driveModel)
             }
         });
+        buzzerModel.addOnPropertyChangedCallback(object : Observable.OnPropertyChangedCallback() {
+            override fun onPropertyChanged(sender: Observable?, propertyId: Int) {
+                sendMessage(buzzerModel)
+            }
+        });
+
 
     }
     fun addWsService(service:WebSocketService){
@@ -97,7 +106,20 @@ class RemoteControlViewModel( val ledModel: LedModel,  val driveModel: DriveMode
         }
 
     }
-
+    fun bindBuzzerButton(button: ImageButton){
+        val listener = RepeatListener(400, 100,
+            object:View.OnClickListener{
+                override fun onClick(p0: View?) {
+                    buzzerModel.active = true
+                }
+            },
+            object:View.OnClickListener{
+                override fun onClick(p0: View?) {
+                    buzzerModel.active = false
+                }
+            })
+        button.setOnTouchListener(listener);
+    }
     fun bindDirectionButton(button: View, type: Direction){
         val listener = RepeatListener(400, 100,
             object:View.OnClickListener{

@@ -1,24 +1,13 @@
 <vector xmlns:android="http://schemas.android.com/apk/res/android" xmlns:aapt="http://schemas.android.com/aapt"
     android:viewportWidth="512"
     android:viewportHeight="512"
-    android:width="512dp"
-    android:height="512dp">
-    <path
-        android:pathData="M470.142 74.142l-28.285 -28.284 -59.999 60 28.285 28.284zm-194.142 -74.142h-40v80h40zm-80 260h40c0 -11.028 8.972 -20 20 -20v-40c-33.084 0 -60 26.916 -60 60zm200 135.44v-135.44c0 -77.196 -62.804 -140 -140 -140s-140 62.804 -140 140v135.44c-23.278 8.256 -40 30.487 -40 56.56v60h360v-60c0 -26.073 -16.722 -48.304 -40 -56.56zm-240 -135.44c0 -55.14 44.859 -100 100 -100s100 44.86 100 100v132h-200zm240 212h-280v-20c0 -11.028 8.972 -20 20 -20h240c11.028 0 20 8.972 20 20zm-265.859 -366.143l-60 -60 -28.283 28.285 60 60z">
-        <aapt:attr
-            name="android:fillColor">
-            <gradient
-                android:startX="256"
-                android:startY="512"
-                android:endX="256"
-                android:tileMode="clamp">
-                <item
-                    android:color="#016AA3"
-                    android:offset="0" />
-                <item
-                    android:color="#FF03DAC5"
-                    android:offset="1" />
-            </gradient>
-        </aapt:attr>
-    </path>
+    android:width="52dp"
+    android:height="52dp">
+    <group android:name="colorAnimate">
+        <path
+            android:name="buzzer"
+            android:fillColor="@color/design_default_color_secondary"
+            android:pathData="M470.142 74.142l-28.285 -28.284 -59.999 60 28.285 28.284zm-194.142 -74.142h-40v80h40zm-80 260h40c0 -11.028 8.972 -20 20 -20v-40c-33.084 0 -60 26.916 -60 60zm200 135.44v-135.44c0 -77.196 -62.804 -140 -140 -140s-140 62.804 -140 140v135.44c-23.278 8.256 -40 30.487 -40 56.56v60h360v-60c0 -26.073 -16.722 -48.304 -40 -56.56zm-240 -135.44c0 -55.14 44.859 -100 100 -100s100 44.86 100 100v132h-200zm240 212h-280v-20c0 -11.028 8.972 -20 20 -20h240c11.028 0 20 8.972 20 20zm-265.859 -366.143l-60 -60 -28.283 28.285 60 60z">
+        </path>
+    </group>
 </vector>

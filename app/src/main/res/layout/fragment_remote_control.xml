@@ -103,7 +103,7 @@
                             android:scaleType="fitCenter"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="parent"
-                            app:srcCompat="@drawable/buzzer" />
+                            app:srcCompat="@drawable/buzzer_anim" />
                         <com.itrkomi.espremotecontrol.ui.views.VerticalDottedProgressBar
                             android:id="@+id/speedBar"
                             android:layout_width="30dp"

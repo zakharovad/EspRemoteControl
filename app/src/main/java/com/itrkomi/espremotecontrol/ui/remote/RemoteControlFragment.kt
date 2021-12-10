@@ -21,6 +21,7 @@ import org.kodein.di.Kodein
 import org.kodein.di.KodeinAware
 import org.kodein.di.generic.instance
 import com.itrkomi.espremotecontrol.MainActivity
+import com.itrkomi.espremotecontrol.models.BuzzerModel
 import com.itrkomi.espremotecontrol.models.DriveModel
 
 
@@ -30,6 +31,7 @@ class RemoteControlFragment : Fragment(), KodeinAware {
     private var _binding: FragmentRemoteControlBinding? = null
     private val ledModel: LedModel by instance<LedModel>("LedModel");
     private val driveModel: DriveModel by instance<DriveModel>("DriveModel");
+    private val buzzerModel: BuzzerModel by instance<BuzzerModel>("BuzzerModel");
     private val binding get() = _binding!!
     private var  wsService: WebSocketService? = null;
     private val connection  = object : ServiceConnection {
@@ -59,7 +61,7 @@ class RemoteControlFragment : Fragment(), KodeinAware {
             savedInstanceState: Bundle?
     ): View? {
         doBindWsService()
-        viewModel = ViewModelProvider(this, RemoteControlViewModelFactory(ledModel,driveModel))[RemoteControlViewModel::class.java]
+        viewModel = ViewModelProvider(this, RemoteControlViewModelFactory(ledModel,driveModel,buzzerModel))[RemoteControlViewModel::class.java]
         _binding = FragmentRemoteControlBinding.inflate(inflater, container, false)
         val root: View = binding.root
         binding.viewModel = viewModel
@@ -71,6 +73,7 @@ class RemoteControlFragment : Fragment(), KodeinAware {
         viewModel.bindDirectionButton(binding.buttonBack, RemoteControlViewModel.Direction.B);
         viewModel.bindDirectionButton(binding.buttonLeft, RemoteControlViewModel.Direction.L);
         viewModel.bindDirectionButton(binding.buttonRight, RemoteControlViewModel.Direction.R);
+        viewModel.bindBuzzerButton(binding.buttonBuzzer);
     }
     override fun onDestroyView() {
         super.onDestroyView()

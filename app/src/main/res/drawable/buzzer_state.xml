@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/enabled"
+        android:drawable="@drawable/buzzer_on"
+        android:state_enabled="true" />
+    <item
+        android:id="@+id/disabled"
+        android:drawable="@drawable/buzzer_off" />
+</selector>
