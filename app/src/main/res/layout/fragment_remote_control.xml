@@ -95,16 +95,20 @@
                         android:layout_weight="1"
                         android:gravity="center"
                         android:orientation="vertical">
-                        <ImageButton
+                        <ToggleButton
                             android:id="@+id/buttonBuzzer"
                             style="@style/Widget.AppCompat.Light.ActionButton"
-                            android:layout_width="100dp"
-                            android:layout_height="100dp"
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
                             android:scaleType="fitCenter"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="parent"
-                            app:srcCompat="@drawable/buzzer_anim" />
+                            android:background="@drawable/buzzer_anim"
+                            android:textOn=""
+                            android:textOff=""
+                            android:text="" />
                         <com.itrkomi.espremotecontrol.ui.views.VerticalDottedProgressBar
+                            android:layout_marginTop="10dp"
                             android:id="@+id/speedBar"
                             android:layout_width="30dp"
                             android:layout_height="100dp"

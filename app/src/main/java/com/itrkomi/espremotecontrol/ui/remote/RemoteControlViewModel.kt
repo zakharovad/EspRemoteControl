@@ -5,7 +5,9 @@ import android.graphics.drawable.Animatable
 import android.util.Log
 import android.view.MotionEvent
 import android.view.View
+import android.widget.Button
 import android.widget.ImageButton
+import android.widget.ToggleButton
 import androidx.databinding.Observable
 import androidx.lifecycle.MutableLiveData
 import com.itrkomi.espremotecontrol.WebSocketService
@@ -43,7 +45,11 @@ class RemoteControlViewModel( val ledModel: LedModel,  val driveModel: DriveMode
         });
         buzzerModel.addOnPropertyChangedCallback(object : Observable.OnPropertyChangedCallback() {
             override fun onPropertyChanged(sender: Observable?, propertyId: Int) {
-                sendMessage(buzzerModel)
+                ioScope.launch (ioScope.coroutineContext + SupervisorJob()){
+                    delay(200)
+                    sendMessage(buzzerModel)
+                }
+
             }
         });
 
@@ -102,23 +108,12 @@ class RemoteControlViewModel( val ledModel: LedModel,  val driveModel: DriveMode
                 driveModel.direction =  driveModel.direction or(8) and(11)
             }
 
-
         }
-
     }
-    fun bindBuzzerButton(button: ImageButton){
-        val listener = RepeatListener(400, 100,
-            object:View.OnClickListener{
-                override fun onClick(p0: View?) {
-                    buzzerModel.active = true
-                }
-            },
-            object:View.OnClickListener{
-                override fun onClick(p0: View?) {
-                    buzzerModel.active = false
-                }
-            })
-        button.setOnTouchListener(listener);
+    fun bindBuzzerButton(button: ToggleButton){
+        button.setOnCheckedChangeListener { _, _ ->
+           buzzerModel.active = !buzzerModel.active
+        }
     }
     fun bindDirectionButton(button: View, type: Direction){
         val listener = RepeatListener(400, 100,
