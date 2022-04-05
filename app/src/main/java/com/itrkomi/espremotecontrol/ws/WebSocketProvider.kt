@@ -21,17 +21,17 @@ class WebSocketProvider {
     private var _webSocketListener: WebSocketListener? = null
 
     @ExperimentalCoroutinesApi
-    fun startSocket(): WebSocketEventBus<SocketUpdate> =
+    fun startSocket(url:String): WebSocketEventBus<SocketUpdate> =
         with(WebSocketListener()) {
-            startSocket(this)
+            startSocket(url,this)
             this@with.eventBus
     }
 
     @ExperimentalCoroutinesApi
-    fun startSocket(webSocketListener: WebSocketListener): WebSocketEventBus<SocketUpdate> {
+    fun startSocket(url:String, webSocketListener: WebSocketListener): WebSocketEventBus<SocketUpdate> {
         _webSocketListener = webSocketListener
         _webSocket = socketOkHttpClient.newWebSocket(
-            Request.Builder().url("ws://192.168.4.1:81").build(),
+            Request.Builder().url(url).build(),
             webSocketListener
         )
         socketOkHttpClient.connectionPool.evictAll();

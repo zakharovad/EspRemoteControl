@@ -25,20 +25,28 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.consumeEach
 import kotlinx.coroutines.launch
 import android.os.Binder
-
-
-
+import com.itrkomi.espremotecontrol.repos.SettingsRepository
 
 
 class WebSocketService : Service(), KodeinAware {
     override val kodein by kodein()
     private val webSocketListener: WebSocketListener by instance<WebSocketListener>();
     private val wsRepository: WSRepository by instance<WSRepository>();
+    private val settingsRepository: SettingsRepository by instance<SettingsRepository>("settingsPreference");
     private val mBinder: IBinder = WebSocketBinder()
     val events = Channel<Any>(Channel.CONFLATED)
     override fun onBind(intent: Intent): IBinder {
         return mBinder;
     }
+    fun getSocketUrl():String{
+        return StringBuilder()
+            .append("ws://")
+            .append(settingsRepository.getValueString("ipAddress", "127.0.0.1"))
+            .append(":")
+            .append(settingsRepository.getValueString("portAddress", "9200"))
+            .toString();
+    }
+
     override fun onCreate() {
         super.onCreate()
         openWebSocket()
@@ -52,7 +60,7 @@ class WebSocketService : Service(), KodeinAware {
     }
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         if(!wsRepository.isStarted()){
-            openWebSocket()
+            //openWebSocket()
         }
         return super.onStartCommand(intent, flags, startId)
     }
@@ -66,7 +74,7 @@ class WebSocketService : Service(), KodeinAware {
         }
     }
     fun openWebSocket(){
-        wsRepository.startSocket(webSocketListener)
+        wsRepository.startSocket(getSocketUrl(),webSocketListener)
     }
     fun closeWebSocket(){
         wsRepository.closeSocket()

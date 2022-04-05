@@ -5,11 +5,14 @@
     android:id="@+id/mobile_navigation"
     app:startDestination="@+id/navigation_remote_control">
 
-
     <fragment
         android:id="@+id/navigation_remote_control"
         android:name="com.itrkomi.espremotecontrol.ui.remote.RemoteControlFragment"
-        android:label="@string/title_remote_control"
-        tools:layout="@layout/fragment_remote_control" />
-
+        android:label="@string/title_remote_control">
+    </fragment>
+    <fragment
+        android:id="@+id/navigation_settings"
+        android:name="com.itrkomi.espremotecontrol.ui.settings.SettingsFragment"
+        android:label="@string/title_settings"
+        />
 </navigation>

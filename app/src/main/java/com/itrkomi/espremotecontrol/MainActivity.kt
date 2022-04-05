@@ -6,6 +6,7 @@ import android.content.Intent
 import android.content.ServiceConnection
 import android.os.Bundle
 import android.os.IBinder
+import android.view.View
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
@@ -37,6 +38,7 @@ class MainActivity : AppCompatActivity(), KodeinAware {
         override fun onServiceConnected(className: ComponentName?, service: IBinder) {
             val binder = service as WebSocketService.WebSocketBinder
             wsService = binder.getService()
+            openWebSocket()
             listenerWebSocket()
         }
         override fun onServiceDisconnected(className: ComponentName) {
@@ -65,11 +67,14 @@ class MainActivity : AppCompatActivity(), KodeinAware {
     }
 
     private fun showMessage(text: String){
-        Snackbar.make(navView , text, Snackbar.LENGTH_LONG).show()
+        Snackbar.make(navView , text, Snackbar.LENGTH_LONG)
+            .setAnchorView(navView)
+            .show()
     }
 
     private fun showMessage(text: String, actionText: String, callBack:() -> Unit){
         Snackbar.make(navView , text, Snackbar.LENGTH_INDEFINITE)
+            .setAnchorView(navView)
             .setAction(actionText) {
                 callBack();
             }.show();

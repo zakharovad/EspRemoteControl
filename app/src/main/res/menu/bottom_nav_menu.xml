@@ -5,5 +5,10 @@
         android:id="@+id/navigation_remote_control"
         android:icon="@drawable/ic_dashboard_black_24dp"
         android:title="@string/title_remote_control" />
+    <item
+        android:id="@+id/navigation_settings"
+        android:icon="@drawable/ic_dashboard_black_24dp"
+        android:title="@string/title_settings" />
+
 
 </menu>

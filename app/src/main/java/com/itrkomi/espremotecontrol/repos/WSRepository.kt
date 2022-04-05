@@ -18,15 +18,15 @@ import kotlinx.coroutines.launch
 class WSRepository constructor(private val provider: WebSocketProvider) {
 
     @ExperimentalCoroutinesApi
-    fun startSocket(): WebSocketEventBus<SocketUpdate> =
-        provider.startSocket()
+    fun startSocket(url:String): WebSocketEventBus<SocketUpdate> =
+        provider.startSocket(url)
     private var _isStarted:Boolean = false;
     fun isStarted():Boolean{
         return _isStarted
     }
     @ExperimentalCoroutinesApi
-    fun startSocket(listener:WebSocketListener): WebSocketEventBus<SocketUpdate> {
-        val eventBus: WebSocketEventBus<SocketUpdate> = provider.startSocket(listener);
+    fun startSocket(url:String,listener:WebSocketListener): WebSocketEventBus<SocketUpdate> {
+        val eventBus: WebSocketEventBus<SocketUpdate> = provider.startSocket(url,listener);
         CoroutineScope(Dispatchers.Main).launch{
             for (event in eventBus.events) {
                 if(event.text == "OpenSocket"){

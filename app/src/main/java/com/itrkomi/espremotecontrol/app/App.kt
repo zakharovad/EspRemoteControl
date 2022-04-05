@@ -4,6 +4,7 @@ import android.app.Application
 import android.content.Context
 import com.itrkomi.espremotecontrol.di.modelsModule
 import com.itrkomi.espremotecontrol.di.networkModule
+import com.itrkomi.espremotecontrol.di.settingsModule
 import org.kodein.di.Kodein
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.x.androidXModule
@@ -19,6 +20,7 @@ class App: Application(), KodeinAware {
         bind<App>() with singleton { this@App }
         import(networkModule);
         import(modelsModule);
+        import(settingsModule);
 
     }
 }
