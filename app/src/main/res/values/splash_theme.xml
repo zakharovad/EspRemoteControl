@@ -3,7 +3,6 @@
     <!-- Splash Screen Theme. -->
     <style name="Theme.AppSplash" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
         <item name="windowSplashScreenBackground">@color/white</item>
-        <item name="windowSplashScreenAnimatedIcon">@mipmap/ic_launcher_round</item>
         <item name="windowSplashScreenAnimationDuration">300</item>
         <!-- Status bar and Nav bar configs -->
         <item name="android:statusBarColor" tools:targetApi="l">@color/white</item>
