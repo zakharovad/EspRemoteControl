@@ -17,7 +17,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.EspRemoteControl"
         android:usesCleartextTraffic="true"
-        tools:targetApi="m" >
+        tools:targetApi="p" >
         <service
             android:name=".WebSocketService"
             android:enabled="true"

@@ -1,6 +1,5 @@
 package com.itrkomi.espremotecontrol.ui.remote
 
-import RepeatListener
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
@@ -8,7 +7,6 @@ import android.content.ServiceConnection
 import android.os.Bundle
 import android.os.IBinder
 import android.view.LayoutInflater
-import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
@@ -16,13 +14,12 @@ import androidx.lifecycle.ViewModelProvider
 import com.itrkomi.espremotecontrol.WebSocketService
 import com.itrkomi.espremotecontrol.databinding.FragmentRemoteControlBinding
 import com.itrkomi.espremotecontrol.models.LedModel
-import com.itrkomi.espremotecontrol.repos.WSRepository
 import org.kodein.di.Kodein
 import org.kodein.di.KodeinAware
 import org.kodein.di.generic.instance
-import com.itrkomi.espremotecontrol.MainActivity
 import com.itrkomi.espremotecontrol.models.BuzzerModel
 import com.itrkomi.espremotecontrol.models.DriveModel
+import com.itrkomi.espremotecontrol.repos.SettingsRepository
 
 
 class RemoteControlFragment : Fragment(), KodeinAware {
@@ -32,6 +29,7 @@ class RemoteControlFragment : Fragment(), KodeinAware {
     private val ledModel: LedModel by instance<LedModel>("LedModel");
     private val driveModel: DriveModel by instance<DriveModel>("DriveModel");
     private val buzzerModel: BuzzerModel by instance<BuzzerModel>("BuzzerModel");
+        private val settingsRepository: SettingsRepository by instance<SettingsRepository>("settingsPreference");
     private val binding get() = _binding!!
     private var  wsService: WebSocketService? = null;
     private val connection  = object : ServiceConnection {
@@ -39,6 +37,9 @@ class RemoteControlFragment : Fragment(), KodeinAware {
             val binder = service as WebSocketService.WebSocketBinder
             wsService = binder.getService()
             viewModel?.addWsService(wsService!!)
+            binding.webStream.settings.loadWithOverviewMode = true;
+            binding.webStream.settings.useWideViewPort = true;
+            binding.webStream.loadUrl(settingsRepository.getValueString("ipAddress", "127.0.0.1")+":8000/bgr")
         }
         override fun onServiceDisconnected(className: ComponentName) {
             wsService = null

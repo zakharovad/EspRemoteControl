@@ -14,6 +14,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="top"
+
             >
 
             <LinearLayout
@@ -22,7 +23,21 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="top"
                 android:orientation="vertical">
+                <LinearLayout
+                    android:id="@+id/videoWrapper"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:baselineAligned="false"
+                    android:gravity="top"
 
+                    android:orientation="horizontal">
+
+                    <WebView
+                        android:id="@+id/webStream"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
+
+                </LinearLayout>
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -46,7 +61,7 @@
                     android:progress="@={viewModel.ledModel.brightness}" />
             </LinearLayout>
             <RelativeLayout
-                android:gravity="center"
+                android:gravity="top"
                 android:layout_weight="2"
                 android:layout_width="match_parent"
                  android:layout_height="match_parent">
