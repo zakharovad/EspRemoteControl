@@ -12,6 +12,11 @@
             android:title="порт для подключеня к устройству"
             app:useSimpleSummaryProvider="true"
             android:id="@+id/port_address"/>
+        <com.itrkomi.espremotecontrol.ui.settings.PortAddressPreference
+            android:key="portCamera"
+            android:title="порт для видео"
+            app:useSimpleSummaryProvider="true"
+            android:id="@+id/port_camera"/>
 
     </PreferenceCategory>
 </androidx.preference.PreferenceScreen>

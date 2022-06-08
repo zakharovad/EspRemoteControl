@@ -24,7 +24,7 @@ import kotlinx.coroutines.*
 
 class RemoteControlViewModel( val ledModel: LedModel,  val driveModel: DriveModel, private val buzzerModel: BuzzerModel) : BaseViewModel() {
     private var wsService:WebSocketService? = null
-
+    lateinit var ledModelJob: Job
     enum class Direction {
         F, B, L, R
     }
@@ -32,15 +32,26 @@ class RemoteControlViewModel( val ledModel: LedModel,  val driveModel: DriveMode
     init {
         ledModel.addOnPropertyChangedCallback(object : Observable.OnPropertyChangedCallback() {
             override fun onPropertyChanged(sender: Observable?, propertyId: Int) {
-                sendMessage(ledModel)
+                if(::ledModelJob.isInitialized){
+                    ledModelJob.cancel()
+                }
+                ledModelJob = ioScope.launch (ioScope.coroutineContext + SupervisorJob()){
+                    delay(100)
+                    sendMessage(ledModel)
+                }
+
             }
         });
         driveModel.addOnPropertyChangedCallback(object : Observable.OnPropertyChangedCallback() {
             override fun onPropertyChanged(sender: Observable?, propertyId: Int) {
-                if(driveModel.direction  === 0){
-                    speedChange(0)
+                ioScope.launch (ioScope.coroutineContext + SupervisorJob()){
+                    delay(800)
+                    if(driveModel.direction  === 0){
+                        speedChange(0)
+                    }
+                    sendMessage(driveModel)
+
                 }
-                sendMessage(driveModel)
             }
         });
         buzzerModel.addOnPropertyChangedCallback(object : Observable.OnPropertyChangedCallback() {

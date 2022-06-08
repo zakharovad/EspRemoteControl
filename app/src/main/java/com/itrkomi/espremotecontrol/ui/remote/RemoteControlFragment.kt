@@ -39,7 +39,10 @@ class RemoteControlFragment : Fragment(), KodeinAware {
             viewModel?.addWsService(wsService!!)
             binding.webStream.settings.loadWithOverviewMode = true;
             binding.webStream.settings.useWideViewPort = true;
-            binding.webStream.loadUrl(settingsRepository.getValueString("ipAddress", "127.0.0.1")+":8000/bgr")
+            binding.webStream.loadUrl(
+                settingsRepository.getValueString("ipAddress", "127.0.0.1")
+                    +":"+settingsRepository.getValueString("portCamera", "9200")
+                    +"/bgr")
         }
         override fun onServiceDisconnected(className: ComponentName) {
             wsService = null
