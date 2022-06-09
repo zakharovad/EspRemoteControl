@@ -49,7 +49,7 @@ class WebSocketService : Service(), KodeinAware {
 
     override fun onCreate() {
         super.onCreate()
-        openWebSocket()
+        //openWebSocket()
         listenerWebSocket();
 
     }
@@ -60,7 +60,7 @@ class WebSocketService : Service(), KodeinAware {
     }
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         if(!wsRepository.isStarted()){
-            openWebSocket()
+            //openWebSocket()
         }
         return super.onStartCommand(intent, flags, startId)
     }
