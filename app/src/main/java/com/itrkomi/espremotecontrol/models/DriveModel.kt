@@ -16,11 +16,12 @@ class DriveModel : BaseWSModel(), Parcelable {
     @Bindable
     var speed: Int = 0
         set(value){
-            if(field == value){
+            val coerceValue = value.coerceIn(0, 255);
+            if(field == coerceValue){
                 return
             }
-            field = value.coerceIn(0, 255);
-            notifyPropertyChanged(BR.speed)
+            field = coerceValue;
+            notifyChange()
         }
     @Bindable
     var direction: Int = 0
@@ -29,6 +30,6 @@ class DriveModel : BaseWSModel(), Parcelable {
                 return
             }
             field = value
-            notifyPropertyChanged(BR.direction)
+            notifyChange()
         }
 }

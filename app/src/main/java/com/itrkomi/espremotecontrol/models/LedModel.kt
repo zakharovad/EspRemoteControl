@@ -20,6 +20,6 @@ class LedModel : BaseWSModel(), Parcelable {
                 return
             }
             field = value;
-            notifyPropertyChanged(BR.brightness)
+            notifyChange()
         }
 }

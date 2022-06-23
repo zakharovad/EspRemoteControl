@@ -1,28 +1,19 @@
 package com.itrkomi.espremotecontrol.ui.remote
 
 import RepeatListener
-import android.graphics.drawable.Animatable
-import android.util.Log
-import android.view.MotionEvent
 import android.view.View
-import android.widget.Button
-import android.widget.ImageButton
 import android.widget.ToggleButton
 import androidx.databinding.Observable
-import androidx.lifecycle.MutableLiveData
 import com.itrkomi.espremotecontrol.WebSocketService
 import com.itrkomi.espremotecontrol.models.BaseWSModel
 import com.itrkomi.espremotecontrol.models.BuzzerModel
 import com.itrkomi.espremotecontrol.models.DriveModel
 import com.itrkomi.espremotecontrol.models.LedModel
-import com.itrkomi.espremotecontrol.repos.WSRepository
 import com.itrkomi.espremotecontrol.ui.base.BaseViewModel
-
-import com.itrkomi.espremotecontrol.ws.models.SocketUpdate
 import kotlinx.coroutines.*
 
 
-class RemoteControlViewModel( val ledModel: LedModel,  val driveModel: DriveModel, private val buzzerModel: BuzzerModel) : BaseViewModel() {
+class RemoteControlViewModel ( val ledModel: LedModel,  val driveModel: DriveModel, private val buzzerModel: BuzzerModel) : BaseViewModel() {
     private var wsService:WebSocketService? = null
     lateinit var ledModelJob: Job
     enum class Direction {
@@ -44,13 +35,9 @@ class RemoteControlViewModel( val ledModel: LedModel,  val driveModel: DriveMode
         });
         driveModel.addOnPropertyChangedCallback(object : Observable.OnPropertyChangedCallback() {
             override fun onPropertyChanged(sender: Observable?, propertyId: Int) {
-                ioScope.launch (ioScope.coroutineContext + SupervisorJob()){
-                    delay(800)
-                    if(driveModel.direction  === 0){
-                        speedChange(0)
-                    }
-                    sendMessage(driveModel)
-
+                sendMessage(driveModel)
+                if(driveModel.direction  === 0){
+                    speedChange(0)
                 }
             }
         });

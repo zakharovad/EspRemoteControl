@@ -36,6 +36,6 @@ class BuzzerModel : BaseWSModel(), Parcelable {
                 return
             }
             field = value;
-            notifyPropertyChanged(BR.active)
+            notifyChange()
         }
 }

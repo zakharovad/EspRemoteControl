@@ -29,7 +29,7 @@ class RemoteControlFragment : Fragment(), KodeinAware {
     private val ledModel: LedModel by instance<LedModel>("LedModel");
     private val driveModel: DriveModel by instance<DriveModel>("DriveModel");
     private val buzzerModel: BuzzerModel by instance<BuzzerModel>("BuzzerModel");
-        private val settingsRepository: SettingsRepository by instance<SettingsRepository>("settingsPreference");
+    private val settingsRepository: SettingsRepository by instance<SettingsRepository>("settingsPreference");
     private val binding get() = _binding!!
     private var  wsService: WebSocketService? = null;
     private val connection  = object : ServiceConnection {
@@ -65,7 +65,7 @@ class RemoteControlFragment : Fragment(), KodeinAware {
             savedInstanceState: Bundle?
     ): View? {
         doBindWsService()
-        viewModel = ViewModelProvider(this, RemoteControlViewModelFactory(ledModel,driveModel,buzzerModel))[RemoteControlViewModel::class.java]
+        viewModel = ViewModelProvider(requireActivity(), RemoteControlViewModelFactory(ledModel,driveModel,buzzerModel))[RemoteControlViewModel::class.java]
         _binding = FragmentRemoteControlBinding.inflate(inflater, container, false)
         val root: View = binding.root
         binding.viewModel = viewModel
